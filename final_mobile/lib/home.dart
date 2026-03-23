@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   // ตัวแปรเก็บข้อมูลจากฐานข้อมูล
   List data = [];
 
@@ -17,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   // ฟังก์ชันดึงข้อมูลจากฐานข้อมูล
   // ===============================
   Future getData() async {
+
     var url = Uri.parse("http://10.0.2.2/flutter_api/get.php");
 
     var response = await http.get(url);
@@ -24,15 +26,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       data = jsonDecode(response.body);
     });
+
   }
 
   // ===============================
   // ฟังก์ชันลบข้อมูล
   // ===============================
   Future deleteData(id) async {
+
     var url = Uri.parse("http://10.0.2.2/flutter_api/delete.php");
 
-    await http.post(url, body: {"id": id});
+    await http.post(url, body: {
+      "id": id
+    });
 
     // โหลดข้อมูลใหม่หลังลบ
     getData();
@@ -49,24 +55,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
       // ===============================
       // AppBar ด้านบน
       // ===============================
-      appBar: AppBar(title: Text("Employee List")),
+      appBar: AppBar(
+        title: Text("Employee List"),
+      ),
 
       // ===============================
       // แสดงข้อมูลจากฐานข้อมูล
       // ===============================
       body: ListView.builder(
+
         itemCount: data.length,
 
-        itemBuilder: (context, index) {
+        itemBuilder: (context,index){
+
           // ดึงเงินเดือนจากฐานข้อมูล
           double salary = double.parse(data[index]['total']);
 
           return Card(
+
             child: ListTile(
+
               // ===============================
               // แสดงชื่อพนักงาน
               // ===============================
@@ -76,9 +90,11 @@ class _HomePageState extends State<HomePage> {
               // แสดงรายละเอียด
               // ===============================
               subtitle: Column(
+
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
+
                   Text("Work Day : ${data[index]['age']}"),
 
                   Text("Salary : $salary"),
@@ -94,7 +110,8 @@ class _HomePageState extends State<HomePage> {
                       : Text(
                           "Normal Salary",
                           style: TextStyle(color: Colors.red),
-                        ),
+                        )
+
                 ],
               ),
 
@@ -102,22 +119,31 @@ class _HomePageState extends State<HomePage> {
               // ปุ่ม Edit และ Delete
               // ===============================
               trailing: Row(
+
                 mainAxisSize: MainAxisSize.min,
 
                 children: [
+
                   // ===============================
                   // ปุ่มแก้ไขข้อมูล
                   // ===============================
                   IconButton(
+
                     icon: Icon(Icons.edit, color: Colors.blue),
 
                     onPressed: () async {
+
                       await Navigator.push(
+
                         context,
 
                         MaterialPageRoute(
-                          builder: (context) =>
-                              EditPage(data: data, index: index),
+
+                          builder: (context) => EditPage(
+                            data: data,
+                            index: index,
+                          ),
+
                         ),
                       );
 
@@ -130,12 +156,16 @@ class _HomePageState extends State<HomePage> {
                   // ปุ่มลบข้อมูล
                   // ===============================
                   IconButton(
+
                     icon: Icon(Icons.delete, color: Colors.red),
 
                     onPressed: () {
+
                       deleteData(data[index]['id']);
+
                     },
                   ),
+
                 ],
               ),
             ),
