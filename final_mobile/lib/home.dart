@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   // ===============================
   Future getData() async {
 
-    var url = Uri.parse("http://10.0.2.2/flutter_api/get.php");
+    var url = Uri.parse("http://10.0.2.2:5000/get");
 
     var response = await http.get(url);
 
@@ -34,11 +34,10 @@ class _HomePageState extends State<HomePage> {
   // ===============================
   Future deleteData(id) async {
 
-    var url = Uri.parse("http://10.0.2.2/flutter_api/delete.php");
+    var url = Uri.parse("http://10.0.2.2:5000/delete");
 
-    await http.post(url, body: {
-      "id": id
-    });
+    await http.post(url, headers: {"Content-Type": "application/json"}, 
+    body: jsonEncode({"id": id}));
 
     // โหลดข้อมูลใหม่หลังลบ
     getData();
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context,index){
 
           // ดึงเงินเดือนจากฐานข้อมูล
-          double salary = double.parse(data[index]['total']);
+          double salary = double.parse(data[index]['total'].toString());
 
           return Card(
 

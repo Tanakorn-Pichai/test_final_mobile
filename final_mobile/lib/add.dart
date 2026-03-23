@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,16 +21,17 @@ class _AddPageState extends State<AddPage> {
     // คำนวณเงินเดือน
     double total = workday * salaryRate;
 
-    var url = Uri.parse("http://10.0.2.2/flutter_api/insert.php");
+    var url = Uri.parse("http://10.0.2.2:5000/insert");
 
     await http.post(
       url,
-      body: {
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
         "name": name.text,
-        "age": workday.toString(),
-        "salary": salaryRate.toString(),
-        "total": total.toString(),
-      },
+        "age": workday,
+        "salary": salaryRate,
+        "total": total,
+      }),
     );
 
     // แสดง dialog บันทึกสำเร็จ

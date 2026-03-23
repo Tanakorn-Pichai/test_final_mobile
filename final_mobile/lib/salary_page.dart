@@ -12,7 +12,7 @@ class _SalaryPageState extends State<SalaryPage> {
 
   // ดึงข้อมูลจากฐานข้อมูล
   Future getData() async {
-    var url = Uri.parse("http://10.0.2.2/flutter_api/get.php");
+    var url = Uri.parse("http://10.0.2.2:5000/get");
 
     var response = await http.get(url);
 
@@ -37,7 +37,7 @@ class _SalaryPageState extends State<SalaryPage> {
 
         itemBuilder: (context, index) {
           // ดึงเงินเดือนจาก DB
-          double salary = double.parse(data[index]['total']);
+          double salary = double.parse(data[index]['total'].toString());
 
           // คำนวณภาษี
           double tax = salary * 0.07;

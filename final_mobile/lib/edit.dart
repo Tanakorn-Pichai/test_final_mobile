@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,8 +24,8 @@ class _EditPageState extends State<EditPage> {
   void initState() {
     // นำค่าจากฐานข้อมูลมาใส่ใน TextField
     name.text = widget.data[widget.index]['name'];
-    day.text = widget.data[widget.index]['age'];
-    rate.text = widget.data[widget.index]['salary'];
+    day.text = widget.data[widget.index]['age'].toString();
+    rate.text = widget.data[widget.index]['salary'].toString();
 
     super.initState();
   }
@@ -36,17 +38,18 @@ class _EditPageState extends State<EditPage> {
     // คำนวณเงินเดือนใหม่
     double total = workday * salaryRate;
 
-    var url = Uri.parse("http://10.0.2.2/flutter_api/update.php");
+    var url = Uri.parse("http://10.0.2.2:5000/update");
 
     await http.post(
       url,
-      body: {
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
         "id": widget.data[widget.index]['id'], // id ของข้อมูล
         "name": name.text,
         "age": workday.toString(),
         "salary": salaryRate.toString(),
         "total": total.toString(),
-      },
+      }),
     );
 
     // กลับไปหน้า Home
